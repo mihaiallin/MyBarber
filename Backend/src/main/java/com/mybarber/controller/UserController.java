@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserRepository userRepository;
@@ -36,8 +36,9 @@ public class UserController {
         User existingUser = userRepository.findById(id).orElse(null);
 
         if (existingUser != null) {
-            existingUser.setUsername(updatedUser.getUsername());
+            existingUser.setEmail(updatedUser.getEmail());
             existingUser.setPassword(updatedUser.getPassword());
+            existingUser.setRole(updatedUser.getRole());
 
             return userRepository.save(existingUser);
         }
