@@ -1,7 +1,13 @@
 package com.mybarber.controller;
 
+import com.mybarber.auth.AuthenticationRequest;
+import com.mybarber.auth.AuthenticationResponse;
+import com.mybarber.auth.AuthenticationService;
+import com.mybarber.auth.RegisterRequest;
 import com.mybarber.model.User;
 import com.mybarber.repository.UserRepository;
+import com.mybarber.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,44 +16,57 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final AuthenticationService service;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService, AuthenticationService service) {
+        this.userService = userService;
+        this.service = service;
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userRepository.findById(id).orElse(null);
+    @PostMapping("/register")
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(service.register(request));
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        return ResponseEntity.ok(service.authenticate(request));
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User existingUser = userRepository.findById(id).orElse(null);
 
-        if (existingUser != null) {
-            existingUser.setEmail(updatedUser.getEmail());
-            existingUser.setPassword(updatedUser.getPassword());
-            existingUser.setRole(updatedUser.getRole());
+//    @GetMapping("/{id}")
+//    public User getUserById(@PathVariable Long id) {
+//        return userRepository.findById(id).orElse(null);
+//    }
 
-            return userRepository.save(existingUser);
-        }
+//    @PostMapping
+//    public User createUser(@RequestBody User user) {
+//        return userRepository.save(user);
+//    }
 
-        return null;
-    }
+//    @PutMapping("/{id}")
+//    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+//        User existingUser = userRepository.findById(id).orElse(null);
+//
+//        if (existingUser != null) {
+//            existingUser.setEmail(updatedUser.getEmail());
+//            existingUser.setPassword(updatedUser.getPassword());
+//            existingUser.setRole(updatedUser.getRole());
+//
+//            return userRepository.save(existingUser);
+//        }
+//
+//        return null;
+//    }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userRepository.deleteById(id);
-    }
+//    @DeleteMapping("/{id}")
+//    public void deleteUser(@PathVariable Long id) {
+//        userRepository.deleteById(id);
+//    }
 }
