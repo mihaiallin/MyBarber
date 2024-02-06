@@ -5,7 +5,6 @@ import com.mybarber.auth.AuthenticationResponse;
 import com.mybarber.auth.AuthenticationService;
 import com.mybarber.auth.RegisterRequest;
 import com.mybarber.model.User;
-import com.mybarber.repository.UserRepository;
 import com.mybarber.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
