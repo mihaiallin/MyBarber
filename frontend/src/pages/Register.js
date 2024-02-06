@@ -1,7 +1,5 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Alert from "../components/Alert";
 import DefaultURL from "../GlobalVariables";
 
 
@@ -46,12 +44,12 @@ function Register() {
       <form onSubmit={onSave}>
         {/* Your form fields go here */}
         <input type="text" name="username" placeholder="Username" required />
-        <input type="text" name="phoneNumber" placeholder="Phone Number" required />
+        <input type="number" name="phoneNumber" placeholder="Phone Number" required />
         <input type="email" name="email" placeholder="Email" required />
         <input type="password" name="password" placeholder="Password" required />
         <select name="role" required>
           <option value="ROLE_CUSTOMER">Customer</option>
-          <option value="ROLE_WORKER">Worker</option>
+          <option value="ROLE_BARBER">Barber</option>
         </select>
         <input type="checkbox" name="checkbox" required />
         <button type="submit">Register</button>
