@@ -27,45 +27,24 @@ public class UserController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+    @GetMapping("/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public User getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id);
+    }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(service.register(request));
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
 
-//    @GetMapping("/{id}")
-//    public User getUserById(@PathVariable Long id) {
-//        return userRepository.findById(id).orElse(null);
-//    }
 
-//    @PostMapping
-//    public User createUser(@RequestBody User user) {
-//        return userRepository.save(user);
-//    }
-
-//    @PutMapping("/{id}")
-//    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-//        User existingUser = userRepository.findById(id).orElse(null);
-//
-//        if (existingUser != null) {
-//            existingUser.setEmail(updatedUser.getEmail());
-//            existingUser.setPassword(updatedUser.getPassword());
-//            existingUser.setRole(updatedUser.getRole());
-//
-//            return userRepository.save(existingUser);
-//        }
-//
-//        return null;
-//    }
-
-//    @DeleteMapping("/{id}")
-//    public void deleteUser(@PathVariable Long id) {
-//        userRepository.deleteById(id);
-//    }
 }
