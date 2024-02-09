@@ -25,7 +25,7 @@ function Navbar() {
                             <span className="nav-link active" aria-current="page">Home</span>
                         </li>
                         <li className="nav-item">
-                            <span className="nav-link">Link</span>
+                            <a className="nav-link" href="/team">Team</a>
                         </li>
                         <li className="nav-item dropdown">
                             <span className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
