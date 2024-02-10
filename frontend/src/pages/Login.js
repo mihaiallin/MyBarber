@@ -39,7 +39,7 @@ const Login = () => {
                 })) {
                     setTimeout(() => {
                         navigate("/")
-                    }, 500);
+                    }, 1000);
                 }
             }
         } catch (error) {
@@ -57,8 +57,8 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={onSubmit} style={{ marginTop: 175 }}>
-            {alert && <Alert type={alert.type} message={alert.message} />}
+        <form onSubmit={onSubmit} style={{marginTop: 175}}>
+            {alert && <Alert type={alert.type} message={alert.message}/>}
             <div className="container py-3 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -90,28 +90,34 @@ const Login = () => {
 
                                 {loading ? (
                                     <div className="spinner-border text-primary" role="status">
-                                        {/*<span className="sr-only"></span>*/}
+                                        <span className="sr-only"></span>
                                     </div>
                                 ) : (
-                                <button
-                                    className="btn btn-primary btn-lg btn-block"
-                                    type="submit"
-                                >
-                                    Login
-                                </button>
-                                    )}
+                                    <button
+                                        className="btn btn-primary btn-lg btn-block mb-2"
+                                        type="submit"
+                                    >
+                                        Login
+                                    </button>
+                                )}
 
-                                <p className="mt-2 fw-light">
+                                <p className="mt-2 mb-4 fw-semibold small">
                                     <a href="/forget-password">Forgot password?</a>
                                 </p>
+                                <hr className="my-4"/>
+                                <a href="/register">
+                                    <button
+                                        className="btn btn-primary btn-lg btn-success"
+                                        type="button"
+                                    >
+                                        Create new account
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <p>
-                Not a member yet? <a href="/register">Register NOW</a>
-            </p>
         </form>
     );
 }
