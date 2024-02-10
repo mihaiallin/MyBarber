@@ -9,6 +9,8 @@ import AuthProvider from "react-auth-kit";
 import Register from "./pages/Register";
 import ErrorPage from "./pages/ErrorPage";
 import Team from "./pages/Team";
+import HomePage from "./pages/HomePage";
+import Footer from "./components/Footer";
 
 function App() {
 
@@ -29,6 +31,7 @@ function App() {
                   <Router>
                       <Routes>
                           <Route path="*" element={<ErrorPage />} />
+                          <Route path="/" element={<HomePage />} />
                           <Route path="/register" element={<Register />} />
                           <Route path="/login" element={<Login />}/>
                           <Route path="/team" element={<Team />}/>
@@ -36,6 +39,7 @@ function App() {
                   </Router>
               </AuthProvider>
           </div>
+          <Footer/>
       </div>
   );
 }
