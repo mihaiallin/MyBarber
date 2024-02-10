@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import logo_22 from "../photo/logosWebsite/Logo_22.png";
+import logo_4 from "../photo/logo/logo_4.png"
 import { Outlet } from "react-router-dom";
 import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 import useSignOut from "react-auth-kit/hooks/useSignOut";
@@ -7,26 +7,27 @@ import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import DefaultURL from "../GlobalVariables";
 import axios from "axios";
 
+
 const NavBar = () => {
     const isAuthenticated = useIsAuthenticated();
     const signOut = useSignOut();
-    const auth = useAuthUser();
+    const authUser = useAuthUser();
     const [currentUser, setCurrentUser] = useState(null);
 
-    useEffect(() => {
-        const getUserByEmail = async () => {
-            try {
-                const response = await axios.get(
-                    `${DefaultURL}/users/email/${auth()?.email}`
-                );
-                const data = response.data;
-                setCurrentUser(data);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        getUserByEmail();
-    }, [auth?.email]);
+    // useEffect(() => {
+    //     const getUserByEmail = async () => {
+    //         try {
+    //             const response = await axios.get(
+    //                 `${DefaultURL}/users/email/${auth()?.email}`
+    //             );
+    //             const data = response.data;
+    //             setCurrentUser(data);
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     };
+    //     getUserByEmail();
+    // }, [auth?.email]);
 
     const handleLogOut = () => {
         window.location.href = "/";
@@ -40,10 +41,10 @@ const NavBar = () => {
                 <div className="container-xl">
                     <a className="navbar-brand" href="/">
                         <img
-                            // src={logo_22}
-                            alt="ourLogo"
+                            src={logo_4}
+                            alt="Logo"
                             className="h-auto"
-                            style={{ maxWidth: 175 }}
+                            style={{ maxWidth: 100 }}
                         />
                     </a>
                     <button
@@ -66,9 +67,9 @@ const NavBar = () => {
                                 <a
                                     className="nav-link font-weight-bold  mx-2"
                                     aria-current="page"
-                                    href="/all-ads"
+                                    href="/team"
                                 >
-                                    View All Ads
+                                    Our Team
                                 </a>
                             </li>
                             {!isAuthenticated() ? (
@@ -78,7 +79,7 @@ const NavBar = () => {
                                         aria-current="page"
                                         href="/register"
                                     >
-                                        Join us
+                                        Register
                                     </a>
                                 </li>
                             ) : null}
