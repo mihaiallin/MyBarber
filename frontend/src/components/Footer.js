@@ -11,13 +11,13 @@ export default function Footer() {
                         </a>
                     </li>
                     <li className="nav-item">
-                        <a href="privacy-and-policy" className="nav-link px-2 text-muted">
-                            Privacy & Policy
+                        <a href="terms-of-service" className="nav-link px-2 text-muted">
+                            Terms of Service
                         </a>
                     </li>
                     <li className="nav-item">
                         <a href="#" className="nav-link px-2 text-muted">
-                            FAQs
+                            Privacy
                         </a>
                     </li>
                     <li className="nav-item">

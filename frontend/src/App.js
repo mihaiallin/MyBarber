@@ -32,6 +32,7 @@ function App() {
                   <Navbar />
                   <div>
                   <Router>
+                      {/*<Navbar />*/}
                       <Routes>
                           <Route path="*" element={<ErrorPage />} />
                           <Route path="/" element={<HomePage />} />
