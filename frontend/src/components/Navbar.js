@@ -8,8 +8,6 @@ import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import DefaultURL from "../GlobalVariables";
 import axios from "axios";
 
-import { Link} from "react-router-dom";
-
 const NavBar = () => {
     const isAuthenticated = useIsAuthenticated();
     const signOut = useSignOut();
@@ -20,7 +18,7 @@ const NavBar = () => {
         const getUserByEmail = async () => {
             try {
                 const response = await axios.get(
-                    `${DefaultURL}/users/email/${authUser()?.email}`
+                    `${DefaultURL}/users/email/${authUser?.email}`
                 );
                 const data = response.data;
                 setCurrentUser(data);

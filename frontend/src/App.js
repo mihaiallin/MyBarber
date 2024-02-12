@@ -13,6 +13,8 @@ import HomePage from "./pages/HomePage";
 import Footer from "./components/Footer";
 import Appointment from "./pages/Appointment";
 import RequireAuth from "@auth-kit/react-router/RequireAuth";
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyAndPolicy from "./pages/PrivacyAndPolicy";
 
 function App() {
 
@@ -39,6 +41,8 @@ function App() {
                           <Route path="/register" element={<Register />} />
                           <Route path="/login" element={<Login />}/>
                           <Route path="/team" element={<Team />}/>
+                          <Route path="/terms-of-service" element={<TermsOfService />}/>
+                          <Route path="/privacy-and-policy" element={<PrivacyAndPolicy />}/>
 
                           <Route path={'/appointment'} element={
                               <RequireAuth fallbackPath={'/login'}>
