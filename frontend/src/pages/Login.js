@@ -1,64 +1,114 @@
 import React, {useState} from "react"
-import axios from 'axios'
+import axios, {AxiosError} from 'axios'
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import DefaultURL from "../GlobalVariables";
 import {useNavigate} from "react-router-dom";
 
-import Alert from "../components/Alert";
-
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 
 
 const Login = () => {
-    const signIn = useSignIn()
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({email: '', password: ''})
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [alert, setAlert] = useState(null);
 
+    const signIn = useSignIn();
+    const auth = useAuthUser();
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true); // Set loading to true when login is initiated
+    const onSubmit = async (values) => {
+        setError("");
+        setLoading(true);
 
-        if (!formData.email || !formData.password) {
-            setAlert({ type: 'danger', message: 'Please provide email and password.' });
-            setLoading(false); // Set loading back to false
-            return;
-        }
 
         try {
-            const res = await axios.post(`${DefaultURL}/users/authenticate`, formData);
-            if (res.status === 200) {
-                if (signIn({
-                    auth: {
-                        token: res.data.token,
-                        type: 'Bearer',
-                        expiresIn: 3600,
-                        authState: { email: formData.email, role: res.data.role }
-                    }
-                })) {
-                    setTimeout(() => {
-                        navigate("/")
-                    }, 1000);
-                }
-            }
-        } catch (error) {
-            console.error('Error:', error.message);
-            if (error.response && error.response.status === 403) {
-                setAlert({ type: 'danger', message: 'Incorrect email or password. Please try again.' });
-            } else {
-                setAlert({ type: 'danger', message: 'An error occurred. Please try again later.' });
-            }
+            const response = await axios.post(`${DefaultURL}/users/authenticate`, values);
+            signIn({
+                auth: {
+                    token: response.data.token,
+                    expiresIn: 3600,
+                    tokenType: "Bearer",
+                },
+                userState: {email: values.email, role: response.data.role}
+            });
+            console.log(auth.role);
+            navigate("/");
+            console.log(response);
+
+        } catch (err){
+            if (err instanceof AxiosError) setError(err.response?.data.message);
+            else if (err instanceof Error) setError(err.message);
         } finally {
-            setTimeout(() => {
-                setLoading(false);
-            }, 200);
+            setLoading(false);
         }
     };
+    const onSave = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const authenticateData = {
+            email: formData.get("email"),
+            password: formData.get("password"),
+        };
+        onSubmit(authenticateData);
+    };
+
+
+
+
+
+
+    // const signIn = useSignIn()
+    // const navigate = useNavigate();
+    // const [formData, setFormData] = useState({email: '', password: ''})
+    // const [loading, setLoading] = useState(false);
+    // const [alert, setAlert] = useState(null);
+    //
+    // const authUser = useAuthUser();
+    //
+    //
+    // const onSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true); // Set loading to true when login is initiated
+    //
+    //     if (!formData.email || !formData.password) {
+    //         setAlert({ type: 'danger', message: 'Please provide email and password.' });
+    //         setLoading(false); // Set loading back to false
+    //         return;
+    //     }
+    //
+    //     try {
+    //         const res = await axios.post(`${DefaultURL}/users/authenticate`, formData);
+    //         if (res.status === 200) {
+    //             if (signIn({
+    //                 auth: {
+    //                     token: res.data.token,
+    //                     type: 'Bearer',
+    //                     expiresIn: 3600,
+    //                     userState: { email: formData.email, role: res.data.role }
+    //                 }
+    //             })) {
+    //                 console.log(authUser)
+    //                 setTimeout(() => {
+    //                     navigate("/")
+    //                 }, 1000);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error.message);
+    //         if (error.response && error.response.status === 403) {
+    //             setAlert({ type: 'danger', message: 'Incorrect email or password. Please try again.' });
+    //         } else {
+    //             setAlert({ type: 'danger', message: 'An error occurred. Please try again later.' });
+    //         }
+    //     } finally {
+    //         setTimeout(() => {
+    //             setLoading(false);
+    //         }, 200);
+    //     }
+    // };
 
     return (
-        <form onSubmit={onSubmit} style={{marginTop: 175}}>
-            {alert && <Alert type={alert.type} message={alert.message}/>}
+        <form onSubmit={onSave} style={{marginTop: 175}}>
+            {/*{alert && <Alert type={alert.type} message={alert.message}/>}*/}
             <div className="container py-3 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -68,8 +118,7 @@ const Login = () => {
 
                                 <div className="form-outline mb-4">
                                     <input
-                                        type={"email"}
-                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                        type="email"
                                         className="form-control"
                                         id="email"
                                         name="email"
@@ -79,8 +128,7 @@ const Login = () => {
 
                                 <div className="form-outline mb-4">
                                     <input
-                                        type={"password"}
-                                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                        type="password"
                                         id="password"
                                         className="form-control"
                                         name="password"
