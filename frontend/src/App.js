@@ -12,6 +12,8 @@ import Footer from "./components/Footer";
 import Appointment from "./pages/Appointment";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyAndPolicy from "./pages/PrivacyAndPolicy";
+import ImageUpload from "./pages/Gallery";
+import Gallery from "./pages/Gallery";
 
 function App() {
 
@@ -21,7 +23,6 @@ function App() {
               <Navbar />
                   <div>
                   <Router>
-                      {/*<Navbar />*/}
                       <Routes>
                           <Route path="*" element={<ErrorPage />} />
                           <Route path="/" element={<HomePage />} />
@@ -30,13 +31,13 @@ function App() {
                           <Route path="/team" element={<Team />}/>
                           <Route path="/terms-of-service" element={<TermsOfService />}/>
                           <Route path="/privacy-and-policy" element={<PrivacyAndPolicy />}/>
+                          <Route path="/gallery" element={<Gallery />}/>
 
                           <Route path={'/appointment'} element={
                               <RequireAuth fallbackPath={'/login'}>
                                   <Appointment/>
                               </RequireAuth>
                           }/>
-
                       </Routes>
                   </Router>
                   </div>
