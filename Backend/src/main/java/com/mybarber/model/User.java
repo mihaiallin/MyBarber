@@ -35,6 +35,9 @@ public class User implements UserDetails {
 
     private String phoneNumber;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Image> images;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
         return List.of(new SimpleGrantedAuthority(role.name()));

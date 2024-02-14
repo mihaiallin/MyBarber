@@ -27,6 +27,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth ->
                         auth
 //                                .requestMatchers("/users").hasRole("CUSTOMER")
+//                                .requestMatchers("/image").hasRole("CUSTOMER")
                                 .requestMatchers("/**", "/users/**").permitAll()
                                 .anyRequest()
                                 .authenticated()
