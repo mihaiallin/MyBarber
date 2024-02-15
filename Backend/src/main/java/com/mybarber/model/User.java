@@ -1,5 +1,6 @@
 package com.mybarber.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mybarber.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,7 +36,8 @@ public class User implements UserDetails {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "uploadedBy", cascade = CascadeType.ALL)
     private List<Image> images;
 
     @Override

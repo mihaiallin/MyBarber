@@ -1,5 +1,6 @@
 package com.mybarber.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,6 @@ public class Image {
     private String filePath;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "user_id") // nullable = false
+    private User uploadedBy;
 }

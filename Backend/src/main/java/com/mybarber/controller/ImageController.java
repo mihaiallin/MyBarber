@@ -3,13 +3,16 @@ package com.mybarber.controller;
 import com.mybarber.model.Image;
 import com.mybarber.model.User;
 import com.mybarber.repository.ImageRepository;
-import net.minidev.json.annotate.JsonIgnore;
+import com.mybarber.repository.UserRepository;
+import com.mybarber.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
@@ -21,10 +24,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/image")
@@ -33,31 +35,23 @@ public class ImageController {
     @Autowired
     private ImageRepository imageRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JwtService jwtService;
+
     @Value("${image.upload.directory}")
     private String uploadDirectory;
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    @GetMapping("/get")
+    public ResponseEntity<List<Image>> getAllPhotos() {
         try {
-            if(file == null || !file.getContentType().startsWith("image")){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only image files are allowed.");
-            }
-
-            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            String filePath = Paths.get(uploadDirectory, fileName).toString();
-            Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-
-            // Save image metadata to database
-            Image image = Image.builder()
-                    .fileName(fileName)
-                    .filePath(filePath)
-                    .build();
-            imageRepository.save(image);
-
-            return ResponseEntity.ok().body("Image uploaded successfully");
-        } catch (IOException e) {
+            List<Image> images = imageRepository.findAll();
+            return ResponseEntity.ok().body(images);
+        } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -82,17 +76,41 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-//    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping()
-    public ResponseEntity<List<Image>> getAllPhotos() {
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+
         try {
-            List<Image> images = imageRepository.findAll();
-            return ResponseEntity.ok().body(images);
-        } catch (Exception e) {
+            if(file == null || !file.getContentType().startsWith("image")){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only image files are allowed.");
+            }
+
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            String filePath = Paths.get(uploadDirectory, fileName).toString();
+            Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+            ///°Auth
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User user = userRepository.findByEmail(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+
+
+            // Save image metadata to database
+            Image image = Image.builder()
+                    .fileName(fileName)
+                    .filePath(filePath)
+                    .uploadedBy(user)
+                    .build();
+            imageRepository.save(image);
+
+            return ResponseEntity.ok().body("Image uploaded successfully");
+        } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePhoto(@PathVariable Long id) {

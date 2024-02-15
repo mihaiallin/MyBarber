@@ -2,10 +2,14 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import DefaultURL from "../GlobalVariables";
 
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+
 const ImageUploadForm = () => {
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
     const [images, setImages] = useState([]);
+
+    const token = useAuthHeader();
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -15,9 +19,10 @@ const ImageUploadForm = () => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('file', file);
+
         try {
             const response = await axios.post(`${DefaultURL}/image/upload`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `${token}`},
             });
             setMessage(response.data);
         } catch (error) {
@@ -28,7 +33,7 @@ const ImageUploadForm = () => {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const response = await axios.get(`${DefaultURL}/image`);
+                const response = await axios.get(`${DefaultURL}/image/get`);
                 setImages(response.data);
             } catch (error) {
                 console.error('Failed to fetch images:', error);
@@ -39,7 +44,9 @@ const ImageUploadForm = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/image/delete/${id}`);
+            await axios.delete(`${DefaultURL}/image/delete/${id}`, {
+                headers: {'Authorization': `${token}`},
+            });
             // Remove the deleted image from the state
             setImages(images.filter(image => image.id !== id));
         } catch (error) {
