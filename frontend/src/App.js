@@ -12,8 +12,8 @@ import Footer from "./components/Footer";
 import Appointment from "./pages/Appointment";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyAndPolicy from "./pages/PrivacyAndPolicy";
-import ImageUpload from "./pages/Gallery";
 import Gallery from "./pages/Gallery";
+import OtherProfile from "./pages/OtherProfile";
 
 function App() {
 
@@ -32,6 +32,8 @@ function App() {
                           <Route path="/terms-of-service" element={<TermsOfService />}/>
                           <Route path="/privacy-and-policy" element={<PrivacyAndPolicy />}/>
                           <Route path="/gallery" element={<Gallery />}/>
+
+                          <Route path="/profile/:id" element={<OtherProfile />} />
 
                           <Route path={'/appointment'} element={
                               <RequireAuth fallbackPath={'/login'}>
