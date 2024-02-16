@@ -92,7 +92,7 @@ const NavBar = () => {
                                         <ul className="dropdown-menu dropdown-menu-end"
                                             aria-labelledby="dropdownMenuButton">
                                             <li><a className="dropdown-item"
-                                                   href={`/profile/`}>Profile</a></li>
+                                                   href={`/profile/${currentUser?.id}`}>Profile</a></li>
                                             <li>
                                                 <hr className="dropdown-divider"/>
                                             </li>
