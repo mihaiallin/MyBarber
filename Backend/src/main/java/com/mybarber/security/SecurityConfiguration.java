@@ -26,11 +26,9 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
-//                                .requestMatchers("/users").hasRole("CUSTOMER")
-//                                .requestMatchers("/image").hasRole("CUSTOMER")
-                                .requestMatchers("/**", "/users/**").permitAll()
-                                .anyRequest()
-                                .authenticated()
+                                .requestMatchers("/image/upload", "/image/delete/**").hasRole("BARBER")
+                                .requestMatchers("/**", "/users/**", "image/get").permitAll()
+                                .anyRequest().authenticated()
                 ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

@@ -4,6 +4,7 @@ import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import DefaultURL from "../GlobalVariables";
 import {useNavigate} from "react-router-dom";
 import Alert from "../components/Alert";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 
 
 const Login = () => {
@@ -12,6 +13,8 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState(null);
     const signIn = useSignIn();
+
+    const authUser = useAuthUser();
 
     const onSubmit = async (values) => {
         setError("");

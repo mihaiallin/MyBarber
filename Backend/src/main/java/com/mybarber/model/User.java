@@ -30,11 +30,13 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
+//    @JsonIgnore
     private String password;
 
     private String name;
 
     private String phoneNumber;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "uploadedBy", cascade = CascadeType.ALL)
