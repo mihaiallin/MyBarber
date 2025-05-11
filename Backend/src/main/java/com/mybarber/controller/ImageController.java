@@ -85,6 +85,13 @@ public class ImageController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only image files are allowed.");
             }
 
+            // Creează folderul dacă nu există
+            Path uploadPath = Paths.get(uploadDirectory);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);  // <-- creează recursiv dacă nu există
+            }
+
+
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             String filePath = Paths.get(uploadDirectory, fileName).toString();
             Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
