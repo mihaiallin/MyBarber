@@ -3,6 +3,7 @@ import axios from 'axios';
 import DefaultURL from "../GlobalVariables";
 
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import useCurrentUser from "../hooks/useCurrentUser"; // Assuming you have this hook to get the current user
 
 const ImageUploadForm = () => {
     const [file, setFile] = useState(null);
@@ -10,6 +11,7 @@ const ImageUploadForm = () => {
     const [images, setImages] = useState([]);
 
     const token = useAuthHeader();
+    const user = useCurrentUser();
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -31,6 +33,7 @@ const ImageUploadForm = () => {
     };
 
     useEffect(() => {
+
         const fetchImages = async () => {
             try {
                 const response = await axios.get(`${DefaultURL}/image/get`);
@@ -67,8 +70,13 @@ const ImageUploadForm = () => {
             <div className="image-grid">
                 {images.map((image) => (
                     <div key={image.id} className="image-item">
-                        <img src={`http://localhost:8080/image/${image.id}`} alt={image.fileName} style={{width: '200px', height: 'auto', margin: '10px'}}/>
-                        <button onClick={() => handleDelete(image.id)}>Delete</button>
+                    <p> Posted by: {image.uploadedBy.name} </p>
+                        <img
+                         src={`http://localhost:8080/image/${image.id}`}
+                          alt={image.fileName} 
+                          style={{width: '200px', height: 'auto', margin: '10px'}}
+                         />   
+                         {user?.id === image.uploadedBy?.id && (<button onClick={() => handleDelete(image.id)}>Delete</button>)}                             
                     </div>
                 ))}
             </div>

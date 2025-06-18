@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -120,10 +122,15 @@ public class ImageController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deletePhoto(@PathVariable Long id) {
+    public ResponseEntity<String> deletePhoto(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+
         try {
             Image image = imageRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Image not found with id: " + id));
+
+            if(!image.getUploadedBy().getEmail().equals(userDetails.getUsername())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not allowed to delete this image");
+            };
 
             // Delete file from folder
             Path filePath = Paths.get(image.getFilePath());

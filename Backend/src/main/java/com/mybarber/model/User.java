@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-//    @JsonIgnore
+    @JsonIgnore
     private String password;
 
     private String name;
