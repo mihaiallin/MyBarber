@@ -14,7 +14,7 @@ public class RegisterRequest {
     private String name;
     private String password;
     private String phoneNumber;
-    private Role role;
+    private Role role = Role.ROLE_CUSTOMER; // sets customer default!
     private String email;
 
 }

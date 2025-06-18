@@ -105,8 +105,10 @@ function Register() {
                                                 className="form-select"
                                                 name="role"
                                                 aria-label="Default select example"
+                                                required
+                                                defaultValue=""
                                             >
-                                                <option selected disabled>
+                                                <option value="" disabled>
                                                      Choose A Role
                                                 </option>
                                                 <option value="ROLE_CUSTOMER">Customer</option>
