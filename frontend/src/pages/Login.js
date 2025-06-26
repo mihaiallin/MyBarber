@@ -30,6 +30,7 @@ const Login = () => {
                 },
                 userState: {email: values.email, role: response.data.role}
             });
+            window.dispatchEvent(new Event("authChange"));
             setAlert({ type: 'success', message: 'Successfully logged in.' });
             setTimeout(() => {
                 navigate("/");
