@@ -59,11 +59,15 @@ const ImageUploadForm = () => {
 
     return (
         <div style={{marginTop: 100}}>
+            
+            {user?.role === "ROLE_BARBER" &&(<div>
             <h2>Upload Image</h2>
             <form onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFileChange}/>
                 <button type="submit">Upload</button>
             </form>
+            </div>)}
+   
             {message && <p>{message}</p>}
 
             <h2>Image Gallery</h2>

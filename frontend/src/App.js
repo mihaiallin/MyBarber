@@ -14,6 +14,7 @@ import TermsOfService from "./pages/TermsOfService";
 import PrivacyAndPolicy from "./pages/PrivacyAndPolicy";
 import Gallery from "./pages/Gallery";
 import OtherProfile from "./pages/OtherProfile";
+import PublicRoute from "./PublicRoute";
 
 function App() {
 
@@ -26,8 +27,8 @@ function App() {
                       <Routes>
                           <Route path="*" element={<ErrorPage />} />
                           <Route path="/" element={<HomePage />} />
-                          <Route path="/register" element={<Register />} />
-                          <Route path="/login" element={<Login />}/>
+                          <Route path="/register" element={<PublicRoute> <Register /> </PublicRoute>} />
+                          <Route path="/login" element={<PublicRoute> <Login /> </PublicRoute>}/>
                           <Route path="/team" element={<Team />}/>
                           <Route path="/terms-of-service" element={<TermsOfService />}/>
                           <Route path="/privacy-and-policy" element={<PrivacyAndPolicy />}/>

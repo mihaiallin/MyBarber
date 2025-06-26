@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+// import useAuthUser from 'react-auth-kit/hooks/useAuthUser'; // Uncomment if you want to use authUser for any purpose
 import barber_1 from "../photo/photos/barber_1.jpg"
 
 import DefaultURL from "../GlobalVariables";
 
 const Team = () => {
-    const authUser = useAuthUser();
+    // const authUser = useAuthUser(); // Uncomment if you want to use authUser for any purpose
     const [barbers, setBarbers] = useState([]);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const Team = () => {
             }
         };
         fetchBarbers();
-    }, [authUser]);
+    }, []);  //[authUser]); // Uncomment if you want to refetch when authUser changes
 
     return (
         <div className="container" style={{marginTop: 100}}>

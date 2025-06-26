@@ -19,8 +19,9 @@ public class Image {
     private String fileName;
 
     private String filePath;
+//    implement reactions like/dislike for images;
 
     @ManyToOne
-    @JoinColumn(name = "user_id") // nullable = false
+    @JoinColumn(name = "user_id", nullable = false) //
     private User uploadedBy;
 }
